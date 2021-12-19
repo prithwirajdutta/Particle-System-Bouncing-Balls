@@ -1,0 +1,59 @@
+<html>
+	<body>
+		<canvas id="canvas"></canvas>
+		<script>
+			const canvas = document.getElementById('canvas');
+			const ctx = canvas.getContext('2d');
+			canvas.width=window.innerWidth;
+			canvas.height=window.innerHeight;
+			var particlesarray = [];
+			class Particle{
+				constructor(x,y){
+					this.x=x;
+					this.y=y;
+					this.size=10;
+					this.weight=2;
+					this.color=color;
+					this.wind=1;
+				}
+				update()
+				{
+				 if(this.y>canvas.height||this.y<0)
+				   {
+				   this.weight *= -1;
+				   this.y += this.weight+1;
+				   }
+				 if(this.x>canvas.width||this.x<0)
+					this.wind *= -1;
+				  this.weight += 0.5;
+				  this.y += this.weight;
+				  this.x += this.wind;
+				}
+				draw()
+				{
+					ctx.beginPath();
+					ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+					ctx.fillStyle=this.color;
+					ctx.fill();
+					ctx.closePath();
+				}
+			}
+			for(var i=0;i<300;i++)
+			{
+				var choose = (i%3==0)?'yellow':'deeppink';
+				var color = (i%2==0)?choose:'purple';
+				particlesarray.push(new Particle(Math.random()*canvas.width,Math.random()*canvas.height,color));
+			}
+			function animate(){
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				for(var i=0;i<300;i++)
+				{
+					particlesarray[i].update();
+					particlesarray[i].draw();
+				}
+				window.requestAnimationFrame(animate);
+			}
+			animate();
+		</script>
+	</body>
+</html>
